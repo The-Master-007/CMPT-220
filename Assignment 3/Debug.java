@@ -1,11 +1,13 @@
+
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         //P1: This one only prints 0-9, can you fix it so it prints 1-10?
         System.out.println("Problem 1");
-        for (int i = 1; i <= 10; i++){
+        for (int i = 1; i < 11; i++) {
             System.out.println(i);
         }
 
@@ -15,18 +17,17 @@ public class Main {
         System.out.println("Enter a number and I will tell you the factorial: ");
         int num = scan.nextInt();
         int factorial = 1;
-        for (int i = 1; i <= num; i++){
+        for (int i = 1; i <= num; i++) {
             factorial *= i;
         }
         System.out.println("The factorial of " + num + " is " + factorial);
-
 
         //P3: Ask the user for a number, and then add together every OTHER digit (starting from 1)
         System.out.println("Problem 3");
         System.out.println("Enter a number and I will tell you the sum of every other number: ");
         num = scan.nextInt();
         int sum = 0;
-        for (int i = 1; i <= num; i += 2){
+        for (int i = 1; i <= num; i += 2) {
             sum += i;
         }
         System.out.println("The sum of every other number up to " + num + " is " + sum);
@@ -35,10 +36,12 @@ public class Main {
         //what can you do to break out of the loop after it prints once?
         System.out.println("Problem 4");
         boolean run = true;
-        while (run == true){
+        while (run == true) {
             System.out.println("I printed once!");
             run = false;
         }
+        // i would personally do a do while although if you are using booleans anyway
+        // this is probably better
 
         //P5: Take a string from the user and print them the reverse!
         System.out.println("Problem 5");
@@ -46,10 +49,13 @@ public class Main {
         String input = scan.next();
         //hint
         String reverse = "";
-        for (int i = input.length() - 1; i >= 0; i--){
+        for (int i = input.length() - 1; i >= 0; i--) {
             reverse += input.charAt(i);
         }
         System.out.println("The reverse of your string is: " + reverse);
-
+        // I have seen as string builder being used for this but I am not quite sure how to implement
+        // that. If only we had pythons .revers()
+        /* I mean these are all pretty basic problems. I'v done similar ones a bunch of times
+         */
     }
 }
