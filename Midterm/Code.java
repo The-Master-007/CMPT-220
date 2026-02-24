@@ -3,76 +3,77 @@
 * time to end of semester
 * persistent storage of todos
  */
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
-public class Main {
 
-    public static ArrayList<String> todos = new ArrayList<>();
+public class Main {
+    public static Scanner scan = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
-        Scanner scan = new Scanner(System.in);
+        while (true) { 
         showMenu();
-        int choice = scan.nextInt();
-        switch (choice) {
-            case 1:
+        String inp = scan.next();
+        if (inp.equalsIgnoreCase("exit")) {
+            break;
+        }
+        if (Integer.parseInt(inp) > 0 && Integer.parseInt(inp) < 4) {
+            int choice = Integer.parseInt(inp);
+            if (choice == 1) {
                 Budget();
-                break;
-            case 2:
-                //      MealSwipeHelper.run();
-                break;
-            case 3:
-                //       TimeToEndOfSemester.run();
-                break;
-            case 4:
-                //        TodoList.run();
-                break;
-            default:
+            } else if (choice == 2) {
+               // MealSwipeHelper();
+            } else if (choice == 3) {
+                 timeToEndOfSemester();
+            }
+        } else {
                 System.out.println("Invalid choice");
         }
+        }
+        /* 
+        int choice = scan.nextInt();
+        if (choice == 1) {
+            Budget();
+        } else if (choice == 2) {
+           // MealSwipeHelper();
+        } else if (choice == 3) {
+             timeToEndOfSemester();
+        } else {
+                System.out.println("Invalid choice");
+        }
+        */
     }
+}
 
     private static void showMenu() {
         System.out.println("1. Budgeting");
         System.out.println("2. Meal Swipe Helper");
         System.out.println("3. Time to End of Semester");
-        System.out.println("4. Todo List");
+        System.out.print("Enter choice: ");
     }
 
     private static void Budget() {
-        System.out.println("Retreiving data from your storage...");
-        loadFromFile();
+        System.out.print("Enter your current balance: ");
+        double budget = scan.nextDouble();
 
-        // later
-        saveToFile();
-    }
+        LocalDate today = LocalDate.now();
+        LocalDate end = LocalDate.of(2026, 5, 15);
+        LocalDate springBreakEnd = LocalDate.of(2026, 3, 22);
 
-    private static void saveToFile() {
-        try {
-            PrintWriter pw = new PrintWriter("budget.txt");
-            for (String todo : todos) {
-                pw.println(todo);
-            }
-            pw.close();
-        } catch (IOException e) {
-            System.out.println("Error saving to file: " + e.getMessage());
+        long weeks = today.until(end, ChronoUnit.WEEKS);
+        // Subtract a week if we are before spring break's end to compensate for not spending money
+        if (today.isBefore(springBreakEnd)) {
+            weeks--;
         }
+        double avgBudget = budget / weeks;
+        System.out.printf("You can spend $%.2f per week until the end of the semester.\n", avgBudget);
     }
-
-    private static void loadFromFile() {
-        try {
-            Scanner inp = new Scanner(new File("budget.txt"));
-            while (inp.hasNextLine()) {
-                String todo = inp.nextLine();
-                todos.add(todo);
-            }
-            inp.close();
-        } catch (IOException e) {
-            System.out.println("Error loading from file: " + e.getMessage());
-        }
+    
+    private static void timeToEndOfSemester()
+    {
+        LocalDate today = LocalDate.now();
+        LocalDate end = LocalDate.of(2026,05, 15);
+        System.out.println(today.until(end, ChronoUnit.DAYS) + " days until the end of the semester!");
     }
 }
-
