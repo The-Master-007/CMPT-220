@@ -33,10 +33,10 @@ public class Main {
                     }
                     // Catches numbers that aren't in [1,3]
                 } else {
-                    System.out.println("Invalid choice");
+                    System.out.println("Invalid choice\n");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input, please enter a number between 1 and 3 or 'exit', 'stop', or 'quit' to quit.");
+                System.out.println("Invalid input, please enter a number between 1 and 3 or 'exit', 'stop', or 'quit' to quit.\n");
             }
         }
     }
@@ -79,35 +79,32 @@ public class Main {
     * @return void
      */
     private static void mealSwipeHelper() {
-    System.out.print("Enter the number of meal swipes you have: ");
-    int swipes = scan.nextInt();
+        System.out.print("Enter the number of meal swipes you have: ");
+        int swipes = scan.nextInt();
 
-    LocalDate today = LocalDate.now();
-    LocalDate end = LocalDate.of(2026, 5, 15);
+        LocalDate today = LocalDate.now();
+        LocalDate end = LocalDate.of(2026, 5, 15);
 
-    // Define spring break range
-    LocalDate springBreakStart = LocalDate.of(2026, 3, 15);
-    LocalDate springBreakEnd = LocalDate.of(2026, 3, 22);
+        // Define spring break range
+        LocalDate springBreakStart = LocalDate.of(2026, 3, 15);
+        LocalDate springBreakEnd = LocalDate.of(2026, 3, 22);
 
-    long days = today.until(end, ChronoUnit.DAYS);
+        long days = today.until(end, ChronoUnit.DAYS);
 
-    // If today is before spring break subtract the 7 break days since no swipes will be used
-    if (today.isBefore(springBreakStart)) {
-        days -= 7;
+        // If today is before spring break subtract the 7 break days since no swipes will be used
+        if (today.isBefore(springBreakStart)) {
+            days -= 7;
+        } // If today is during spring break, subtract the remaining break days
+        else if (!today.isAfter(springBreakEnd)) {
+            long remainingBreakDays = today.until(springBreakEnd, ChronoUnit.DAYS);
+            days -= remainingBreakDays;
+        }
+
+        // After spring break, skip adjustment steps
+        double swipesPerDay = ((double) swipes / days);
+
+        System.out.printf("You should use %.2f meal swipes per day to last until the end of the semester.\n\n", swipesPerDay);
     }
-
-    // If today is during spring break, subtract the remaining break days
-    else if (!today.isAfter(springBreakEnd)) {
-        long remainingBreakDays = today.until(springBreakEnd, ChronoUnit.DAYS);
-        days -= remainingBreakDays;
-    }
-
-    // After spring break, skip adjustment steps
-
-    double swipesPerDay = ((double) swipes / days);
-
-    System.out.printf("You should use %.2f meal swipes per day to last until the end of the semester.\n\n", swipesPerDay);
-}
 
     /* Calculates the number of days until the end of the semester    
     * @param none
