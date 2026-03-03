@@ -14,9 +14,9 @@ public class Main {
         // Runs until the user stops it
         while (true) {
             showMenu();
-            // Exits loops if the user types "exit"
+            // Exits loops if the user types exit, quit, or stop
             String inp = scan.next();
-            if (inp.equalsIgnoreCase("exit")) {
+            if (inp.equalsIgnoreCase("exit") || inp.equalsIgnoreCase("quit") || inp.equalsIgnoreCase("stop")) {
                 break;
             }
             try {
@@ -25,18 +25,18 @@ public class Main {
                     int choice = Integer.parseInt(inp);
                     // Calls functions based on the users choice
                     if (choice == 1) {
-                        budget();
+                        budgetDenDollars();
                     } else if (choice == 2) {
                         mealSwipeHelper();
                     } else if (choice == 3) {
                         timeToEndOfSemester();
                     }
-                    // honestly this is probably doubly redundant but handles errors
+                    // Catches numbers that aren't in [1,3]
                 } else {
                     System.out.println("Invalid choice");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input, please enter a number between 1 and 3 or 'exit' to quit.");
+                System.out.println("Invalid input, please enter a number between 1 and 3 or 'exit', 'stop', or 'quit' to quit.");
             }
         }
     }
@@ -56,10 +56,10 @@ public class Main {
     * @param none
     * @return void
      */
-    private static void budget() {
+    private static void budgetDenDollars() {
         System.out.print("Enter your current balance: ");
         double budget = scan.nextDouble();
-        // Uses LocalDate instead of like Java.Time because thats what the autocomplete thing said
+        // Uses LocalDate as a way to store time without using hours/minutes/seconds etc
         LocalDate today = LocalDate.now();
         LocalDate end = LocalDate.of(2026, 5, 15);
         LocalDate springBreakEnd = LocalDate.of(2026, 3, 22);
@@ -71,7 +71,7 @@ public class Main {
         }
         // Calculates the average budget usage to deplete the balance to 2 decimal places
         double avgBudget = budget / weeks;
-        System.out.printf("You can spend $%.2f per week until the end of the semester.\n", avgBudget);
+        System.out.printf("You can spend $%.2f per week until the end of the semester.\n\n", avgBudget);
     }
 
     /* Shows how many meal swipes a student can use per day to last until the end of the semester   
@@ -79,18 +79,35 @@ public class Main {
     * @return void
      */
     private static void mealSwipeHelper() {
-        System.out.print("Enter the number of meal swipes you have: ");
-        int swipes = scan.nextInt();
-        // Reuses the same logic from the other function
-        // TODO actually calculate for spring break
-        LocalDate today = LocalDate.now();
-        LocalDate end = LocalDate.of(2026, 5, 15);
-        LocalDate springBreakEnd = LocalDate.of(2026, 3, 22);
+    System.out.print("Enter the number of meal swipes you have: ");
+    int swipes = scan.nextInt();
 
-        long days = today.until(end, ChronoUnit.DAYS);
-        int swipesPerDay = (int) Math.ceil((double) swipes / days);
-        System.out.println("You should use " + swipesPerDay + " meal swipes per day to last until the end of the semester.");
+    LocalDate today = LocalDate.now();
+    LocalDate end = LocalDate.of(2026, 5, 15);
+
+    // Define spring break range
+    LocalDate springBreakStart = LocalDate.of(2026, 3, 15);
+    LocalDate springBreakEnd = LocalDate.of(2026, 3, 22);
+
+    long days = today.until(end, ChronoUnit.DAYS);
+
+    // If today is before spring break subtract the 7 break days since no swipes will be used
+    if (today.isBefore(springBreakStart)) {
+        days -= 7;
     }
+
+    // If today is during spring break, subtract the remaining break days
+    else if (!today.isAfter(springBreakEnd)) {
+        long remainingBreakDays = today.until(springBreakEnd, ChronoUnit.DAYS);
+        days -= remainingBreakDays;
+    }
+
+    // After spring break, skip adjustment steps
+
+    double swipesPerDay = ((double) swipes / days);
+
+    System.out.printf("You should use %.2f meal swipes per day to last until the end of the semester.\n\n", swipesPerDay);
+}
 
     /* Calculates the number of days until the end of the semester    
     * @param none
@@ -99,6 +116,6 @@ public class Main {
     private static void timeToEndOfSemester() {
         LocalDate today = LocalDate.now();
         LocalDate end = LocalDate.of(2026, 05, 15);
-        System.out.println(today.until(end, ChronoUnit.DAYS) + " days until the end of the semester!");
+        System.out.println(today.until(end, ChronoUnit.DAYS) + " days until the end of the semester!\n");
     }
 }
