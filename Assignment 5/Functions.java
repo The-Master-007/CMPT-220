@@ -10,10 +10,12 @@ class Main {
     
     public static String passwordChecker(String pass)
     {
+        //Conditions that a good password will have
         boolean hasUpper = false;
         boolean hasLower = false;
         boolean hasNum = false;
         boolean hasSpecial = false;
+        //Trying to replicate the in [a,b,c] from python
         String specials = "!@#$%^&*";
         
         for (int i = 0; i < pass.length(); i++)
@@ -25,6 +27,7 @@ class Main {
                 hasLower = true;
             if (Character.isDigit(c))
                 hasNum = true;
+            //I asked ChatGPT how I could get something similar to python
             if (specials.indexOf(c) != -1)
                 hasSpecial = true;
         }
@@ -38,7 +41,9 @@ class Main {
             score++;
         if (hasSpecial)
             score++;
-            
+        //My only add-on would be to make it tell you WHAT you did wrong
+        //right now if you are 1 character length off even if you have all 4
+        //you still get deducted, so a system to dynamically offer help
         if (pass.length() >= 10 && score >= 3)
             return "Strong";
         if (pass.length() >= 8 && score == 2)
