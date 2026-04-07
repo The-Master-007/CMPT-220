@@ -19,7 +19,10 @@ public class Main {
         Goblin g1 = new Goblin(40, 8);
         g1.attack();
         System.out.println();
-        // Showcasing damage functions and killing
+        // Showcasing extra functions
+        g1.steal();
+        g1.heal(10);
+        System.out.println();
         w1.dealDamage(w2);
         w3.dealDamage(w2);
     }
